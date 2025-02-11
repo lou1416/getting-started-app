@@ -9,7 +9,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: loumrt
-          password: ${{ secret.DOCKER_TOKEN }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
