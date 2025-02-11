@@ -1,24 +1,18 @@
 name: build-docker
 on: [push]
-jobs: 
-  build-docker-image: 
+jobs:
+  build-docker-image:
     runs-on: ubuntu-latest
-    steps: 
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: loumrt
-          password: ${{ secrets.DOCKER_TOKEN }}
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: user/app:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: List files
+        run: ls
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/bellimage:latest .
+      - name: List Docker images
+        run: docker images
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/bellimage:latest
